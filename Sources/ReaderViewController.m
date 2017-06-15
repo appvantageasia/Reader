@@ -26,7 +26,6 @@
 #import "ReaderConstants.h"
 #import "ReaderViewController.h"
 #import "ThumbsViewController.h"
-#import "ReaderMainToolbar.h"
 #import "ReaderMainPagebar.h"
 #import "ReaderContentView.h"
 #import "ReaderThumbCache.h"
@@ -44,7 +43,7 @@
 
 	UIScrollView *theScrollView;
 
-	ReaderMainToolbar *mainToolbar;
+//	ReaderMainToolbar *mainToolbar;
 
 	ReaderMainPagebar *mainPagebar;
 
@@ -120,7 +119,7 @@
 		scrollView.contentOffset = contentOffset; // Update content offset
 	}
 
-	[mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
+	[_mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
 
 	[mainPagebar updatePagebar]; // Update page bar
 }
@@ -221,7 +220,7 @@
 			}
 		];
 
-		[mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
+		[_mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
 
 		[mainPagebar updatePagebar]; // Update page bar
 	}
@@ -249,7 +248,7 @@
 			}
 		];
 
-		[mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
+		[_mainToolbar setBookmarkState:[document.bookmarks containsIndex:page]];
 
 		[mainPagebar updatePagebar]; // Update page bar
 	}
@@ -355,9 +354,9 @@
 	[self.view addSubview:theScrollView];
 
 	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
-	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
-	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
-	[self.view addSubview:mainToolbar];
+	_mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
+	_mainToolbar.delegate = self; // ReaderMainToolbarDelegate
+	[self.view addSubview:_mainToolbar];
 
 	CGRect pagebarRect = self.view.bounds; pagebarRect.size.height = PAGEBAR_HEIGHT;
 	pagebarRect.origin.y = (self.view.bounds.size.height - pagebarRect.size.height);
@@ -441,7 +440,7 @@
 	NSLog(@"%s", __FUNCTION__);
 #endif
 
-	mainToolbar = nil; mainPagebar = nil;
+	_mainToolbar = nil; mainPagebar = nil;
 
 	theScrollView = nil; contentViews = nil; lastHideTime = nil;
 
@@ -605,9 +604,9 @@
 			{
 				if ([lastHideTime timeIntervalSinceNow] < -0.75) // Delay since hide
 				{
-					if ((mainToolbar.alpha < 1.0f) || (mainPagebar.alpha < 1.0f)) // Hidden
+					if ((_mainToolbar.alpha < 1.0f) || (mainPagebar.alpha < 1.0f)) // Hidden
 					{
-						[mainToolbar showToolbar]; [mainPagebar showPagebar]; // Show
+						[_mainToolbar showToolbar]; [mainPagebar showPagebar]; // Show
 					}
 				}
 			}
@@ -689,7 +688,7 @@
 
 - (void)contentView:(ReaderContentView *)contentView touchesBegan:(NSSet *)touches
 {
-	if ((mainToolbar.alpha > 0.0f) || (mainPagebar.alpha > 0.0f))
+	if ((_mainToolbar.alpha > 0.0f) || (mainPagebar.alpha > 0.0f))
 	{
 		if (touches.count == 1) // Single touches only
 		{
@@ -702,7 +701,7 @@
 			if (CGRectContainsPoint(areaRect, point) == false) return;
 		}
 
-		[mainToolbar hideToolbar]; [mainPagebar hidePagebar]; // Hide
+		[_mainToolbar hideToolbar]; [mainPagebar hidePagebar]; // Hide
 
 		lastHideTime = [NSDate date]; // Set last hide time
 	}
@@ -835,11 +834,11 @@
 
 	if ([document.bookmarks containsIndex:currentPage]) // Remove bookmark
 	{
-		[document.bookmarks removeIndex:currentPage]; [mainToolbar setBookmarkState:NO];
+		[document.bookmarks removeIndex:currentPage]; [_mainToolbar setBookmarkState:NO];
 	}
 	else // Add the bookmarked page number to the bookmark index set
 	{
-		[document.bookmarks addIndex:currentPage]; [mainToolbar setBookmarkState:YES];
+		[document.bookmarks addIndex:currentPage]; [_mainToolbar setBookmarkState:YES];
 	}
 
 #endif // end of READER_BOOKMARKS Option

@@ -61,7 +61,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-	return [self initWithFrame:frame document:nil];
+	return [super initWithFrame:frame];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame document:(ReaderDocument *)document

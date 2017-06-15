@@ -26,6 +26,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ReaderDocument.h"
+#import "ReaderMainToolbar.h"
 
 @class ReaderViewController;
 
@@ -40,6 +41,7 @@
 @interface ReaderViewController : UIViewController
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
+@property (nonatomic, strong) ReaderMainToolbar *mainToolbar;
 
 - (instancetype)initWithReaderDocument:(ReaderDocument *)object;
 
